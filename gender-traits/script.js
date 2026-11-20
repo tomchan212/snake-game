@@ -1,69 +1,74 @@
-const TRAITS = [
-  { id: "adaptable", en: "Adaptable", zh: "適應性強", column: 1 },
-  { id: "affectionate", en: "Affectionate", zh: "情深", column: 2 },
-  { id: "aggressive", en: "Aggressive", zh: "好鬥", column: 3 },
-  { id: "conceited", en: "Conceited", zh: "自負", column: 1 },
-  { id: "compassionate", en: "Compassionate", zh: "有同情心", column: 2 },
-  { id: "assertive", en: "Assertive", zh: "果敢的", column: 3 },
-  { id: "conscientious", en: "Conscientious", zh: "嚴肅認真", column: 1 },
+const COLUMN_1 = [
+  { id: "adaptable", en: "Adaptable", zh: "適應性強" },
+  { id: "conceited", en: "Conceited", zh: "自負" },
+  { id: "conscientious", en: "Conscientious", zh: "嚴肅認真" },
+  { id: "conventional", en: "Conventional", zh: "循規蹈矩" },
+  { id: "jealous", en: "Jealous", zh: "妒嫉" },
+  { id: "moody", en: "Moody", zh: "情緒化" },
+  { id: "reliable", en: "Reliable", zh: "可靠穩當" },
+  { id: "secretive", en: "Secretive", zh: "收藏" },
+  { id: "tactful", en: "Tactful", zh: "圓滑" },
+  { id: "truthful", en: "Truthful", zh: "講真話" },
+];
+
+const COLUMN_2 = [
+  { id: "affectionate", en: "Affectionate", zh: "情深" },
+  { id: "compassionate", en: "Compassionate", zh: "有同情心" },
   {
     id: "eager-to-soothe",
     en: "Eager to soothe hurt feelings",
     zh: "渴望安撫受傷的感覺",
-    column: 2,
   },
-  {
-    id: "defends-beliefs",
-    en: "Defends own beliefs",
-    zh: "捍衛自己的信念",
-    column: 3,
-  },
-  { id: "conventional", en: "Conventional", zh: "循規蹈矩", column: 1 },
-  { id: "gentle", en: "Gentle", zh: "溫和", column: 2 },
-  { id: "dominant", en: "Dominant", zh: "主導", column: 3 },
-  { id: "jealous", en: "Jealous", zh: "妒嫉", column: 1 },
-  { id: "loves-children", en: "Loves children", zh: "愛小孩", column: 2 },
-  { id: "forceful", en: "Forceful", zh: "強悍富說服力", column: 3 },
-  { id: "moody", en: "Moody", zh: "情緒化", column: 1 },
+  { id: "gentle", en: "Gentle", zh: "溫和" },
+  { id: "loves-children", en: "Loves children", zh: "愛小孩" },
   {
     id: "sensitive-needs",
     en: "Sensitive to the needs of others",
     zh: "在意別人需要",
-    column: 2,
   },
+  { id: "sympathetic", en: "Sympathetic", zh: "能引起他人共鳴" },
+  { id: "tender", en: "Tender", zh: "溫柔慈愛" },
+  { id: "understanding", en: "Understanding", zh: "明白事理" },
+  { id: "warm", en: "Warm", zh: "親切溫暖" },
+];
+
+const COLUMN_3 = [
+  { id: "aggressive", en: "Aggressive", zh: "好鬥" },
+  { id: "assertive", en: "Assertive", zh: "果敢的" },
+  {
+    id: "defends-beliefs",
+    en: "Defends own beliefs",
+    zh: "捍衛自己的信念",
+  },
+  { id: "dominant", en: "Dominant", zh: "主導" },
+  { id: "forceful", en: "Forceful", zh: "強悍富說服力" },
   {
     id: "leadership",
     en: "Has leadership abilities",
     zh: "領袖才能",
-    column: 3,
   },
-  { id: "reliable", en: "Reliable", zh: "可靠穩當", column: 1 },
-  { id: "sympathetic", en: "Sympathetic", zh: "能引起他人共鳴", column: 2 },
-  { id: "independent", en: "Independent", zh: "獨立", column: 3 },
-  { id: "secretive", en: "Secretive", zh: "收藏", column: 1 },
-  { id: "tender", en: "Tender", zh: "溫柔慈愛", column: 2 },
+  { id: "independent", en: "Independent", zh: "獨立" },
   {
     id: "strong-personality",
     en: "Strong Personality",
     zh: "頑強個性",
-    column: 3,
   },
-  { id: "tactful", en: "Tactful", zh: "圓滑", column: 1 },
-  { id: "understanding", en: "Understanding", zh: "明白事理", column: 2 },
   {
     id: "take-a-stand",
     en: "Willing to take a stand",
     zh: "願意站出來",
-    column: 3,
   },
-  { id: "truthful", en: "Truthful", zh: "講真話", column: 1 },
-  { id: "warm", en: "Warm", zh: "親切溫暖", column: 2 },
   {
     id: "take-risk",
     en: "Willing to take risk",
     zh: "願意冒險",
-    column: 3,
   },
+];
+
+const TRAITS = [
+  ...COLUMN_1.map((trait) => ({ ...trait, column: 1 })),
+  ...COLUMN_2.map((trait) => ({ ...trait, column: 2 })),
+  ...COLUMN_3.map((trait) => ({ ...trait, column: 3 })),
 ];
 
 const questionsEl = document.getElementById("questions");
@@ -81,101 +86,72 @@ const axisCaptionEl = document.getElementById("axis-caption");
 const toastEl = document.getElementById("toast");
 const resetBtn = document.getElementById("reset-btn");
 
-const COLUMN_META = {
-  1: {
-    title: "第一欄 · Column 1",
-    note: "虛擬列（Dummy series），同樣需要作答",
-  },
-  2: {
-    title: "第二欄 · Column 2",
-    note: "計分會合計此欄分數",
-  },
-  3: {
-    title: "第三欄 · Column 3",
-    note: "計分會合計此欄分數，再以第二欄減去此欄",
-  },
-};
-
-function createQuestionCard(trait, displayNumber, delayIndex) {
-  const card = document.createElement("section");
-  card.className = "question-card";
-  card.style.animationDelay = `${Math.min(delayIndex * 0.02, 0.3)}s`;
-  card.dataset.traitId = trait.id;
-  card.dataset.column = String(trait.column);
-
-  const choices = Array.from({ length: 7 }, (_, i) => {
+function scoreOptions(traitId) {
+  const options = Array.from({ length: 7 }, (_, i) => {
     const value = i + 1;
-    return `
-      <label>
-        <input type="radio" name="${trait.id}" value="${value}" required />
-        <span class="choice">${value}</span>
-      </label>
-    `;
+    return `<option value="${value}">${value}</option>`;
   }).join("");
 
-  card.innerHTML = `
-    <div class="question-top">
-      <span class="q-num">${String(displayNumber).padStart(2, "0")}</span>
-      <h3 class="q-title">
+  return `
+    <select
+      class="score-select"
+      name="${traitId}"
+      id="score-${traitId}"
+      required
+      aria-label="1 到 7 分"
+    >
+      <option value="" selected disabled>—</option>
+      ${options}
+    </select>
+  `;
+}
+
+function traitCell(trait, column) {
+  return `
+    <div class="trait-cell" data-trait-id="${trait.id}" data-column="${column}">
+      <span class="col-tag" aria-hidden="true">第${column}欄</span>
+      <label class="trait-label" for="score-${trait.id}">
         <span class="en">${trait.en}</span>
         <span class="zh">${trait.zh}</span>
-      </h3>
-    </div>
-    <div class="likert" role="radiogroup" aria-label="${trait.en} ${trait.zh}">
-      ${choices}
-    </div>
-    <div class="likert-legend" aria-hidden="true">
-      <span>1 從不</span>
-      <span>7 絕對</span>
+      </label>
+      ${scoreOptions(trait.id)}
     </div>
   `;
-
-  return card;
 }
 
 function renderQuestions() {
-  const fragment = document.createDocumentFragment();
-  let displayNumber = 0;
-  let delayIndex = 0;
-
-  [1, 2, 3].forEach((column) => {
-    const traits = TRAITS.filter((trait) => trait.column === column);
-    const meta = COLUMN_META[column];
-
-    const section = document.createElement("section");
-    section.className = "column-section";
-    section.dataset.column = String(column);
-
-    const heading = document.createElement("header");
-    heading.className = "column-heading";
-    heading.innerHTML = `
-      <h2>${meta.title}</h2>
-      <p>${meta.note}</p>
+  const rows = COLUMN_1.map((col1Trait, index) => {
+    const col2Trait = COLUMN_2[index];
+    const col3Trait = COLUMN_3[index];
+    return `
+      <div class="traits-row" style="animation-delay: ${Math.min(index * 0.03, 0.3)}s">
+        ${traitCell(col1Trait, 1)}
+        ${traitCell(col2Trait, 2)}
+        ${traitCell(col3Trait, 3)}
+      </div>
     `;
-    section.appendChild(heading);
+  }).join("");
 
-    const list = document.createElement("div");
-    list.className = "column-questions";
-
-    traits.forEach((trait) => {
-      displayNumber += 1;
-      list.appendChild(createQuestionCard(trait, displayNumber, delayIndex));
-      delayIndex += 1;
-    });
-
-    section.appendChild(list);
-    fragment.appendChild(section);
-  });
-
-  questionsEl.appendChild(fragment);
+  questionsEl.innerHTML = `
+    <section class="traits-sheet" aria-label="三欄特質問卷">
+      <div class="traits-head" aria-hidden="true">
+        <div class="traits-head-cell">第一欄</div>
+        <div class="traits-head-cell">第二欄</div>
+        <div class="traits-head-cell">第三欄</div>
+      </div>
+      <div class="traits-body">
+        ${rows}
+      </div>
+    </section>
+  `;
 }
 
 function getAnswers() {
   const answers = new Map();
   TRAITS.forEach((trait) => {
-    const selected = formEl.querySelector(`input[name="${trait.id}"]:checked`);
-    if (selected) {
-      answers.set(trait.id, Number(selected.value));
+    const field = formEl.querySelector(`select[name="${trait.id}"]`);
+    if (field && field.value) {
+      answers.set(trait.id, Number(field.value));
     }
   });
   return answers;
@@ -190,9 +166,9 @@ function updateProgress(answers) {
   progressBarEl.setAttribute("aria-valuenow", String(count));
 
   TRAITS.forEach((trait) => {
-    const card = questionsEl.querySelector(`[data-trait-id="${trait.id}"]`);
-    if (card) {
-      card.classList.toggle("is-answered", answers.has(trait.id));
+    const cell = questionsEl.querySelector(`[data-trait-id="${trait.id}"]`);
+    if (cell) {
+      cell.classList.toggle("is-answered", answers.has(trait.id));
     }
   });
 }
@@ -250,7 +226,7 @@ function updateScores(answers) {
     axisMarkerEl.classList.remove("is-active");
     axisCaptionEl.textContent =
       col1Answered || col2Answered || col3Answered
-        ? "完成第二欄與第三欄相關題目後會顯示最終結果位置"
+        ? "完成第二欄與第三欄後會顯示最終結果位置"
         : "完成全部題目後會顯示結果位置";
   }
 }
@@ -286,10 +262,11 @@ formEl.addEventListener("submit", (event) => {
 
   if (answers.size < TRAITS.length) {
     const firstUnanswered = TRAITS.find((trait) => !answers.has(trait.id));
-    const card = questionsEl.querySelector(
+    const cell = questionsEl.querySelector(
       `[data-trait-id="${firstUnanswered.id}"]`
     );
-    card?.scrollIntoView({ behavior: "smooth", block: "center" });
+    cell?.scrollIntoView({ behavior: "smooth", block: "center" });
+    cell?.querySelector("select")?.focus();
     showToast(`尚有 ${TRAITS.length - answers.size} 題未作答`);
     return;
   }
