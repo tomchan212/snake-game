@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gender Traits Test · 性別特質測驗</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Outfit:wght@500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="form-header">
+        <div class="header-accent" aria-hidden="true"></div>
+        <p class="brand">Personality Assessment</p>
+        <h1>Gender Traits Test</h1>
+        <p class="subtitle">
+          根據以下量表回答有關該術語如何最適合地描述您的情況
+        </p>
+        <p class="subtitle-en">
+          Use the scale below to rate how well each term describes you.
+        </p>
+      </header>
+
+      <section class="scale-card" aria-labelledby="scale-heading">
+        <h2 id="scale-heading">評分量表 · Rating Scale</h2>
+        <ol class="scale-list">
+          <li><span>1</span> 從來或絕對不認同 · Never or almost never true</li>
+          <li><span>2</span> 多數不認同 · Usually not true</li>
+          <li><span>3</span> 有時但不常認同 · Sometimes but infrequently true</li>
+          <li><span>4</span> 有時認同 · Occasionally true</li>
+          <li><span>5</span> 經常認同 · Often true</li>
+          <li><span>6</span> 常常認同 · Usually true</li>
+          <li><span>7</span> 絕對認同 · Always or almost always true</li>
+        </ol>
+      </section>
+
+      <div class="progress-wrap" aria-live="polite">
+        <div class="progress-meta">
+          <span>已完成 <strong id="answered-count">0</strong> / 30</span>
+          <span id="progress-pct">0%</span>
+        </div>
+        <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="30" aria-valuenow="0">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+      </div>
+
+      <form id="traits-form" novalidate>
+        <div id="questions"></div>
+
+        <section class="results-card" aria-labelledby="results-heading">
+          <h2 id="results-heading">計分 · Scoring</h2>
+          <p class="results-note">
+            合計第二欄和第三欄。第一欄可能被稱為虛擬列，以防止您在參加考試時歪曲測試。<br />
+            <em>Total the second and third columns. The first column may be called a dummy column to prevent you from distorting the test while taking it.</em>
+          </p>
+
+          <dl class="score-grid">
+            <div>
+              <dt>第二欄的總和 · Column 2 total</dt>
+              <dd id="col2-total">—</dd>
+            </div>
+            <div>
+              <dt>第三欄的總和 · Column 3 total</dt>
+              <dd id="col3-total">—</dd>
+            </div>
+            <div class="score-result">
+              <dt>第二欄 − 第三欄 · Column 2 − Column 3</dt>
+              <dd id="final-score">—</dd>
+            </div>
+          </dl>
+
+          <div class="axis" aria-hidden="true">
+            <div class="axis-track">
+              <div class="axis-marker" id="axis-marker"></div>
+            </div>
+            <div class="axis-labels">
+              <span>−70</span>
+              <span>−20</span>
+              <span>0</span>
+              <span>+20</span>
+              <span>+70</span>
+            </div>
+          </div>
+          <p class="axis-caption" id="axis-caption">完成全部題目後會顯示結果位置</p>
+        </section>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" id="reset-btn">重設答案</button>
+          <button type="submit" class="btn btn-primary" id="submit-btn">查看結果</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="toast" id="toast" hidden role="status"></div>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
