@@ -72,6 +72,7 @@ const answeredCountEl = document.getElementById("answered-count");
 const progressPctEl = document.getElementById("progress-pct");
 const progressFillEl = document.getElementById("progress-fill");
 const progressBarEl = document.querySelector(".progress-bar");
+const col1TotalEl = document.getElementById("col1-total");
 const col2TotalEl = document.getElementById("col2-total");
 const col3TotalEl = document.getElementById("col3-total");
 const finalScoreEl = document.getElementById("final-score");
@@ -150,14 +151,20 @@ function updateProgress(answers) {
 }
 
 function updateScores(answers) {
+  let col1 = 0;
   let col2 = 0;
   let col3 = 0;
+  let col1Answered = 0;
   let col2Answered = 0;
   let col3Answered = 0;
 
   TRAITS.forEach((trait) => {
     if (!answers.has(trait.id)) return;
     const value = answers.get(trait.id);
+    if (trait.column === 1) {
+      col1 += value;
+      col1Answered += 1;
+    }
     if (trait.column === 2) {
       col2 += value;
       col2Answered += 1;
@@ -172,8 +179,9 @@ function updateScores(answers) {
   const col2Ready = col2Answered === 10;
   const col3Ready = col3Answered === 10;
 
-  col2TotalEl.textContent = col2Ready ? String(col2) : answers.size ? String(col2) : "—";
-  col3TotalEl.textContent = col3Ready ? String(col3) : answers.size ? String(col3) : "—";
+  col1TotalEl.textContent = answers.size ? String(col1) : "—";
+  col2TotalEl.textContent = answers.size ? String(col2) : "—";
+  col3TotalEl.textContent = answers.size ? String(col3) : "—";
 
   if (col2Ready && col3Ready) {
     const result = col2 - col3;
@@ -193,7 +201,10 @@ function updateScores(answers) {
     finalScoreEl.textContent = "—";
     axisMarkerEl.style.left = "50%";
     axisMarkerEl.classList.remove("is-active");
-    axisCaptionEl.textContent = "完成第二欄與第三欄相關題目後會顯示結果位置";
+    axisCaptionEl.textContent =
+      col1Answered || col2Answered || col3Answered
+        ? "完成第二欄與第三欄相關題目後會顯示最終結果位置"
+        : "完成全部題目後會顯示結果位置";
   }
 }
 
