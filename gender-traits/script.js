@@ -81,43 +81,90 @@ const axisCaptionEl = document.getElementById("axis-caption");
 const toastEl = document.getElementById("toast");
 const resetBtn = document.getElementById("reset-btn");
 
+const COLUMN_META = {
+  1: {
+    title: "第一欄 · Column 1",
+    note: "虛擬列（Dummy series），同樣需要作答",
+  },
+  2: {
+    title: "第二欄 · Column 2",
+    note: "計分會合計此欄分數",
+  },
+  3: {
+    title: "第三欄 · Column 3",
+    note: "計分會合計此欄分數，再以第二欄減去此欄",
+  },
+};
+
+function createQuestionCard(trait, displayNumber, delayIndex) {
+  const card = document.createElement("section");
+  card.className = "question-card";
+  card.style.animationDelay = `${Math.min(delayIndex * 0.02, 0.3)}s`;
+  card.dataset.traitId = trait.id;
+  card.dataset.column = String(trait.column);
+
+  const choices = Array.from({ length: 7 }, (_, i) => {
+    const value = i + 1;
+    return `
+      <label>
+        <input type="radio" name="${trait.id}" value="${value}" required />
+        <span class="choice">${value}</span>
+      </label>
+    `;
+  }).join("");
+
+  card.innerHTML = `
+    <div class="question-top">
+      <span class="q-num">${String(displayNumber).padStart(2, "0")}</span>
+      <h3 class="q-title">
+        <span class="en">${trait.en}</span>
+        <span class="zh">${trait.zh}</span>
+      </h3>
+    </div>
+    <div class="likert" role="radiogroup" aria-label="${trait.en} ${trait.zh}">
+      ${choices}
+    </div>
+    <div class="likert-legend" aria-hidden="true">
+      <span>1 從不</span>
+      <span>7 絕對</span>
+    </div>
+  `;
+
+  return card;
+}
+
 function renderQuestions() {
   const fragment = document.createDocumentFragment();
+  let displayNumber = 0;
+  let delayIndex = 0;
 
-  TRAITS.forEach((trait, index) => {
-    const card = document.createElement("section");
-    card.className = "question-card";
-    card.style.animationDelay = `${Math.min(index * 0.02, 0.3)}s`;
-    card.dataset.traitId = trait.id;
+  [1, 2, 3].forEach((column) => {
+    const traits = TRAITS.filter((trait) => trait.column === column);
+    const meta = COLUMN_META[column];
 
-    const choices = Array.from({ length: 7 }, (_, i) => {
-      const value = i + 1;
-      return `
-        <label>
-          <input type="radio" name="${trait.id}" value="${value}" required />
-          <span class="choice">${value}</span>
-        </label>
-      `;
-    }).join("");
+    const section = document.createElement("section");
+    section.className = "column-section";
+    section.dataset.column = String(column);
 
-    card.innerHTML = `
-      <div class="question-top">
-        <span class="q-num">${String(index + 1).padStart(2, "0")}</span>
-        <h3 class="q-title">
-          <span class="en">${trait.en}</span>
-          <span class="zh">${trait.zh}</span>
-        </h3>
-      </div>
-      <div class="likert" role="radiogroup" aria-label="${trait.en} ${trait.zh}">
-        ${choices}
-      </div>
-      <div class="likert-legend" aria-hidden="true">
-        <span>1 從不</span>
-        <span>7 絕對</span>
-      </div>
+    const heading = document.createElement("header");
+    heading.className = "column-heading";
+    heading.innerHTML = `
+      <h2>${meta.title}</h2>
+      <p>${meta.note}</p>
     `;
+    section.appendChild(heading);
 
-    fragment.appendChild(card);
+    const list = document.createElement("div");
+    list.className = "column-questions";
+
+    traits.forEach((trait) => {
+      displayNumber += 1;
+      list.appendChild(createQuestionCard(trait, displayNumber, delayIndex));
+      delayIndex += 1;
+    });
+
+    section.appendChild(list);
+    fragment.appendChild(section);
   });
 
   questionsEl.appendChild(fragment);
